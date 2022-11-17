@@ -65,7 +65,7 @@ class _ExampleCustomState extends State<ExampleCustom> {
 
   @override
   void didUpdateWidget(ExampleCustom oldWidget) {
-    customLayoutOption = CustomLayoutOption(startIndex: -1, stateCount: 3)
+    customLayoutOption = CustomLayoutOption(startIndex: -1, stateCount: 2)
       ..addRotate([-45.0 / 180, 0.0, 45.0 / 180])
       ..addTranslate(
         [
@@ -79,7 +79,7 @@ class _ExampleCustomState extends State<ExampleCustom> {
 
   @override
   void initState() {
-    customLayoutOption = CustomLayoutOption(startIndex: -1, stateCount: 3)
+    customLayoutOption = CustomLayoutOption(startIndex: -1, stateCount: 2)
       ..addRotate([-25.0 / 180, 0.0, 25.0 / 180])
       ..addTranslate(
         [
@@ -136,7 +136,7 @@ class _ExampleCustomState extends State<ExampleCustom> {
       },
       curve: _curve,
       scale: _scale,
-      itemWidth: widgetSize.width * 0.95,
+      itemWidth: widgetSize.width * 0.85,
       controller: _controller,
       layout: _layout,
       outer: _outer,
@@ -166,15 +166,15 @@ class _ExampleCustomState extends State<ExampleCustom> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
           color: Colors.black87,
-          child: Center(
-            child: SizedBox(
-              height: 300.0,
-              width: double.infinity,
-              child: buildSwiper(),
-            ),
+          child: SizedBox(
+            height: 300.0,
+            width: double.infinity,
+            child: buildSwiper(),
           ),
         ),
         Expanded(

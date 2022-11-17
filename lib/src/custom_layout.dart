@@ -43,11 +43,13 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T> wit
 
   @mustCallSuper
   void afterRender() {
-    final renderObject = context.findRenderObject()!;
-    final size = renderObject.paintBounds.size;
-    _swiperWidth = size.width;
-    _swiperHeight = size.height;
-    setState(() {});
+    final renderObject = context.findRenderObject();
+    if (renderObject != null) {
+      final size = renderObject.paintBounds.size;
+      _swiperWidth = size.width;
+      _swiperHeight = size.height;
+      setState(() {});
+    }
   }
 
   @override
@@ -128,12 +130,19 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T> wit
     );
   }
 
+  void _updateLayoutSwiperWidget(Size widgetSize) {
+    setState(() {
+      _swiperWidth = widgetSize.width;
+      _swiperHeight = widgetSize.height;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final widgetSize = MediaQuery.of(context).size;
 
     if (widgetSize.width != _swiperWidth) {
-      afterRender();
+      _updateLayoutSwiperWidget(widgetSize);
     }
 
     if (_animationCount == null) {
