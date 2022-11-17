@@ -1,7 +1,6 @@
 part of 'swiper.dart';
 
-abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T>
-    with SingleTickerProviderStateMixin {
+abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T> with SingleTickerProviderStateMixin {
   late double _swiperWidth;
   late double _swiperHeight;
   late Animation<double> _animation;
@@ -131,6 +130,12 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T>
 
   @override
   Widget build(BuildContext context) {
+    final widgetSize = MediaQuery.of(context).size;
+
+    if (widgetSize.width != _swiperWidth) {
+      afterRender();
+    }
+
     if (_animationCount == null) {
       return Container();
     }
@@ -230,20 +235,17 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T>
   void _onPanStart(DragStartDetails details) {
     if (_lockScroll) return;
     _currentValue = _animationController.value;
-    _currentPos = widget.scrollDirection == Axis.horizontal
-        ? details.globalPosition.dx
-        : details.globalPosition.dy;
+    _currentPos = (widget.scrollDirection == Axis.horizontal) ? details.globalPosition.dx : details.globalPosition.dy;
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
     if (_lockScroll) return;
-    var value = _currentValue +
-        ((widget.scrollDirection == Axis.horizontal
-                    ? details.globalPosition.dx
-                    : details.globalPosition.dy) -
-                _currentPos) /
-            _swiperWidth /
-            2;
+
+    final detailGlobalPosition =
+        (widget.scrollDirection == Axis.horizontal ? details.globalPosition.dx : details.globalPosition.dy);
+
+    var value = _currentValue + (detailGlobalPosition - _currentPos) / _swiperWidth / 2;
+
     // no loop ?
     if (!widget.loop) {
       if (_currentIndex >= widget.itemCount - 1) {
@@ -317,8 +319,9 @@ class ScaleTransformBuilder extends TransformBuilder<double> {
 }
 
 class OpacityTransformBuilder extends TransformBuilder<double> {
-  OpacityTransformBuilder({required List<double> values})
-      : super(values: values);
+  OpacityTransformBuilder({
+    required List<double> values,
+  }) : super(values: values);
 
   @override
   Widget build(int i, double animationValue, Widget widget) {
@@ -331,8 +334,9 @@ class OpacityTransformBuilder extends TransformBuilder<double> {
 }
 
 class RotateTransformBuilder extends TransformBuilder<double> {
-  RotateTransformBuilder({required List<double> values})
-      : super(values: values);
+  RotateTransformBuilder({
+    required List<double> values,
+  }) : super(values: values);
 
   @override
   Widget build(int i, double animationValue, Widget widget) {
@@ -345,8 +349,9 @@ class RotateTransformBuilder extends TransformBuilder<double> {
 }
 
 class TranslateTransformBuilder extends TransformBuilder<Offset> {
-  TranslateTransformBuilder({required List<Offset> values})
-      : super(values: values);
+  TranslateTransformBuilder({
+    required List<Offset> values,
+  }) : super(values: values);
 
   @override
   Widget build(int i, double animationValue, Widget widget) {
