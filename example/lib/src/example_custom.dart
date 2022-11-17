@@ -83,9 +83,9 @@ class _ExampleCustomState extends State<ExampleCustom> {
       ..addRotate([-25.0 / 180, 0.0, 25.0 / 180])
       ..addTranslate(
         [
-          const Offset(-350.0, 0.0),
+          const Offset(-300.0, 0.0),
           Offset.zero,
-          const Offset(350.0, 0.0),
+          const Offset(300.0, 0.0),
         ],
       );
     _fade = 1.0;
@@ -94,16 +94,16 @@ class _ExampleCustomState extends State<ExampleCustom> {
     _scale = 0.8;
     _autoplay = false;
     _controller = SwiperController();
-    _layout = SwiperLayout.TINDER;
+    _layout = SwiperLayout.STACK;
     _radius = 10.0;
     _padding = 0.0;
     _loop = true;
-    _itemCount = 3;
+    _itemCount = images.length;
     _autoplayDelay = 3000;
     _viewportFraction = 0.8;
     _outer = false;
     _scrollDirection = Axis.horizontal;
-    _axisDirection = AxisDirection.left;
+    _axisDirection = AxisDirection.right;
     _autoplayDisableOnInteraction = false;
     super.initState();
   }
@@ -111,6 +111,8 @@ class _ExampleCustomState extends State<ExampleCustom> {
 // maintain the index
 
   Widget buildSwiper() {
+    final widgetSize = MediaQuery.of(context).size;
+
     return Swiper(
       onTap: (index) {
         Navigator.of(context).push(MaterialPageRoute<Object>(
@@ -134,11 +136,11 @@ class _ExampleCustomState extends State<ExampleCustom> {
       },
       curve: _curve,
       scale: _scale,
-      itemWidth: 300.0,
+      itemWidth: widgetSize.width * 0.95,
       controller: _controller,
       layout: _layout,
       outer: _outer,
-      itemHeight: 200.0,
+      itemHeight: widgetSize.height * 0.3,
       viewportFraction: _viewportFraction,
       autoplayDelay: _autoplayDelay,
       loop: _loop,
@@ -149,9 +151,15 @@ class _ExampleCustomState extends State<ExampleCustom> {
       axisDirection: _axisDirection,
       indicatorLayout: PageIndicatorLayout.COLOR,
       autoplayDisableOnInteraction: _autoplayDisableOnInteraction,
-      pagination: const SwiperPagination(
-          builder: DotSwiperPaginationBuilder(
-              size: 20.0, activeSize: 20.0, space: 10.0)),
+      /*
+        pagination: const SwiperPagination(
+        builder: DotSwiperPaginationBuilder(
+          size: 20.0,
+          activeSize: 20.0,
+          space: 10.0,
+        ),
+      ),
+      */
     );
   }
 
@@ -161,10 +169,12 @@ class _ExampleCustomState extends State<ExampleCustom> {
       children: <Widget>[
         Container(
           color: Colors.black87,
-          child: SizedBox(
-            height: 300.0,
-            width: double.infinity,
-            child: buildSwiper(),
+          child: Center(
+            child: SizedBox(
+              height: 300.0,
+              width: double.infinity,
+              child: buildSwiper(),
+            ),
           ),
         ),
         Expanded(
@@ -205,12 +215,7 @@ class _ExampleCustomState extends State<ExampleCustom> {
                 child: FormSelect<SwiperLayout>(
                   placeholder: 'Select layout',
                   value: _layout,
-                  values: const [
-                    SwiperLayout.DEFAULT,
-                    SwiperLayout.STACK,
-                    SwiperLayout.TINDER,
-                    SwiperLayout.CUSTOM
-                  ],
+                  values: const [SwiperLayout.DEFAULT, SwiperLayout.STACK, SwiperLayout.TINDER, SwiperLayout.CUSTOM],
                   valueChanged: (value) {
                     _layout = value;
                     setState(() {});
@@ -221,43 +226,35 @@ class _ExampleCustomState extends State<ExampleCustom> {
                 label: 'scrollDirection',
                 child: Switch(
                     value: _scrollDirection == Axis.horizontal,
-                    onChanged: (value) => setState(() => _scrollDirection =
-                        value ? Axis.horizontal : Axis.vertical)),
+                    onChanged: (value) => setState(() => _scrollDirection = value ? Axis.horizontal : Axis.vertical)),
               ),
               if (_layout == SwiperLayout.STACK)
                 FormWidget(
                   label: 'axisDirection (left <-> right)',
                   child: Switch(
                       value: _axisDirection == AxisDirection.right,
-                      onChanged: (value) => setState(() => _axisDirection =
-                          value ? AxisDirection.right : AxisDirection.left)),
+                      onChanged: (value) =>
+                          setState(() => _axisDirection = value ? AxisDirection.right : AxisDirection.left)),
                 ),
               FormWidget(
                 label: 'autoplayDisableOnInteraction',
                 child: Switch(
                     value: _autoplayDisableOnInteraction,
-                    onChanged: (value) =>
-                        setState(() => _autoplayDisableOnInteraction = value)),
+                    onChanged: (value) => setState(() => _autoplayDisableOnInteraction = value)),
               ),
               //Pannel Begin
               FormWidget(
                 label: 'loop',
-                child: Switch(
-                    value: _loop,
-                    onChanged: (value) => setState(() => _loop = value)),
+                child: Switch(value: _loop, onChanged: (value) => setState(() => _loop = value)),
               ),
               FormWidget(
                 label: 'outer',
-                child: Switch(
-                    value: _outer,
-                    onChanged: (value) => setState(() => _outer = value)),
+                child: Switch(value: _outer, onChanged: (value) => setState(() => _outer = value)),
               ),
               //Pannel Begin
               FormWidget(
                 label: 'autoplay',
-                child: Switch(
-                    value: _autoplay,
-                    onChanged: (value) => setState(() => _autoplay = value)),
+                child: Switch(value: _autoplay, onChanged: (value) => setState(() => _autoplay = value)),
               ),
 
               FormWidget(

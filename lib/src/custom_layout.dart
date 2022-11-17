@@ -1,7 +1,7 @@
 part of 'swiper.dart';
 
 abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T> with SingleTickerProviderStateMixin {
-  late double _swiperWidth;
+  double _swiperWidth = 0;
   late double _swiperHeight;
   late Animation<double> _animation;
   late AnimationController _animationController;
